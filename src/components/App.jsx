@@ -31,18 +31,27 @@ export class App extends Component {
     return contacts;
   }
 
-  addContact = (name, number) => {
-    this.setState(prev => ({
-      contacts: [
-        ...prev.contacts,
-        {
-          name,
-          number,
-          id: nanoid(),
-        },
-      ],
+  addContact = ({ name, number }) => {
+    const normalizedFind = name.toLowerCase();
+    const findName = this.state.contacts.find(
+      contact => contact.name.toLowerCase() === normalizedFind
+    );
+    if (findName) {
+      return alert(`${name} is already in contacts.`);
+    }
+
+    const findNumber = this.state.contacts.find(
+      contact => contact.number === number
+    );
+    if (findNumber) {
+      return alert(`This phone number is already in use.`);
+    }
+
+    this.setState(({ contacts }) => ({
+      contacts: [{ name, number, id: nanoid() }, ...contacts],
     }));
   };
+
 
   removeContact = id => {
     this.setState(prev => ({
@@ -59,7 +68,7 @@ export class App extends Component {
     return (
       <>
         <Section title={'Phonebook'}>
-          <FormNewContact contacts={contacts} addContact={this.addContact} />
+          <FormNewContact onSubmit={this.addContact} />
         </Section>
         <Section title={'Contacts'}>
           {contacts.length ? (
@@ -69,8 +78,7 @@ export class App extends Component {
                 handleChange={this.handleChange}
               />
               <ContactsList
-                // searchValue={filter}
-                contacts={this.filterContacts()} //how it fires???
+                contacts={this.filterContacts()}
                 removeContact={this.removeContact}
               />
             </>
