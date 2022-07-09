@@ -17,8 +17,8 @@ const SearchContact = ({ searchValue, handleChange }) => {
 };
 
 SearchContact.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default SearchContact;
